@@ -1,0 +1,13 @@
+#这个脚本是用来对paramiko进行一个简单的使用，登录设备并执行命令然后输出
+import paramiko
+import time
+connection=paramiko.SSHClient() #实例SSH会话
+connection.set_missing_host_key_policy(paramiko.AutoAddPolicy()) #默认拒绝所有不信任的公钥，这里设置自动增加主机的公钥
+connection.connect(hostname='10.1.2.3',username='admin',password='Nm@208080232',port=22,look_for_keys=False,allow_agent=False) #调用connectt方法登录设备，look_for_keys=False关闭查找本地私钥文件
+stdin,stdout,stderr=connection.exec_command('show ip int brief')
+print(stdout.read().decode('utf-8'))
+time.sleep(2) #如果不应用此模块，将会出现Exception ignored in: <function BufferedFile.__del__ at 0x7fc3982c6a60>报错，原因是ssh时间太短，没有回显
+connection.close()
+
+
+
